@@ -14,7 +14,6 @@ export default {
                 let data = await fetch('https://floating-ocean-48488.herokuapp.com/users', {
                     method: 'GET',
                     mode: 'cors',
-                    credentials:'include',
                     headers:{
                     'Content-Type': 'application/json',
                     "Authorization" : `Bearer ${store.state.accessToken}`

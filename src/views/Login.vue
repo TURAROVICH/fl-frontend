@@ -26,17 +26,7 @@ export default {
     ...mapMutations(['setAccessToken','setUser']),
     async login(){
       try{
-        // let data = await fetch('https://floating-ocean-48488.herokuapp.com/login', {
-        //   method: 'POST',
-        //   credentials: 'include',
-        //   mode: 'no-cors',
-        //   headers:{
-        //     'Content-Type': 'application/json'
-        //   },
-        //   body: JSON.stringify(this.form),
-        // })
-        // data = await data.json();
-        let login = await axios.post('https://floating-ocean-48488.herokuapp.com/login',this.form,{withCredentials:true})
+        let login = await axios.post('https://floating-ocean-48488.herokuapp.com/login',this.form)
         let data =  await login.data
         this.error =await  data.message
         if(await data.accessToken && await data.user){
