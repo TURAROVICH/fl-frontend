@@ -3,7 +3,7 @@
       <div class="login-page-container">
         <img style="margin-bottom:30px" src="@/assets/icons/login.svg" alt="">
         <form @submit.prevent="register" class="login-form">
-          <div class="error-text">{{error && error.message}} </div>
+          <div class="error-text">{{error}} </div>
           <Field  @form="(pay) => form.name = pay"  icon="login" type="text" placeholder="Имя" />
           <Field  @form="(pay) => form.email = pay"  icon="login" type="email" placeholder="Email" />
           <Field  @form="(pay) => form.password = pay"  icon="password" placeholder="Пароль" />
@@ -26,18 +26,22 @@ export default {
   methods:{
     ...mapMutations(['setAccessToken','setUser']),
     async register(){
-      try{
-        let register = await axios.post('https://floating-ocean-48488.herokuapp.com/login',this.form)
-        let data =  await register.data
-         if(await data.accessToken && await data.user){
+      axios.post('https://floating-ocean-48488.herokuapp.com/login',this.form)
+        .then(data=>{
+         if(data.accessToken && data.user){
           this.setAccessToken(data.accessToken)
           this.setUser(data.user)
           this.$router.push('/')
         }
-      }catch(e){
-        console.error('error:',e.message);
-        this.error =await data.message
-      }
+        })
+        .catch(e=>{
+           if(e.response){
+            this.error = e.response.data.message
+            return
+          }
+          console.error('error:',e.message);
+        })
+      
     }
   }
 }

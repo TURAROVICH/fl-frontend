@@ -3,7 +3,7 @@
       <div class="login-page-container">
         <img style="margin-bottom:30px" src="@/assets/icons/login.svg" alt="">
         <form @submit.prevent="login" class="login-form">
-          <div class="error-text">{{error && error.message}} </div>
+          <div class="error-text">{{error}} </div>
           <Field @form="(pay) => form.email = pay" icon="login" type="email" placeholder="Email"/>
           <Field  @form="(pay) => form.password = pay" icon="password" placeholder="Пароль" />
           <button class="btn" type="submit"><span>Авторизоваться</span></button>
@@ -24,19 +24,24 @@ export default {
   }),
   methods:{
     ...mapMutations(['setAccessToken','setUser']),
-    async login(){
-      try{
-        let login = await axios.post('https://floating-ocean-48488.herokuapp.com/login',this.form)
-        let data =  await login.data
-        if(await data.accessToken && await data.user){
-          this.setAccessToken(data.accessToken)
-          this.setUser(data.user)
-          this.$router.push('/')
-        }
-      }catch(e){
-        this.error =await  data.message
-        console.error('error:',e.message);
-      }
+    login(){
+        axios.post('https://floating-ocean-48488.herokuapp.com/login',this.form)
+        .then(({data})=>{
+
+          if( data.accessToken &&  data.user){
+            this.setAccessToken(data.accessToken)
+            this.setUser(data.user)
+            this.$router.push('/')
+          }
+        })
+        .catch(e=>{
+          if(e.response){
+          this.error = e.response.data.message
+          console.log(e.response.data);
+          return
+          }
+          console.error('error:',e.message);
+        })
     }
   }
 }
