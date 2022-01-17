@@ -26,7 +26,7 @@ export default {
   methods:{
     ...mapMutations(['setAccessToken','setUser']),
     async register(){
-      axios.post('https://floating-ocean-48488.herokuapp.com/login',this.form)
+      axios.post('https://floating-ocean-48488.herokuapp.com/register',this.form)
         .then(data=>{
          if(data.accessToken && data.user){
           this.setAccessToken(data.accessToken)
