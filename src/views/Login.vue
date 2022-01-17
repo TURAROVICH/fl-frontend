@@ -28,14 +28,14 @@ export default {
       try{
         let login = await axios.post('https://floating-ocean-48488.herokuapp.com/login',this.form)
         let data =  await login.data
-        this.error =await  data.message
         if(await data.accessToken && await data.user){
           this.setAccessToken(data.accessToken)
           this.setUser(data.user)
           this.$router.push('/')
         }
       }catch(e){
-        console.error('error:',e);
+        this.error =await  data.message
+        console.error('error:',e.message);
       }
     }
   }
